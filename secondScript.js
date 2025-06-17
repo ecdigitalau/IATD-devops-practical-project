@@ -19,7 +19,7 @@ while (index < words.length - 1) {
 }
 
 if (isIncreasing === true) {
-    console.log("Good job, you followed the pattern!");
+    console.log("Great job, you followed the pattern!");
 } else {
-    console.log("Those words don't follow the pattern, try again.");
+    console.log("Those words did not follow the pattern, please try again.");
 }
