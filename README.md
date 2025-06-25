@@ -1,4 +1,4 @@
-How to use:
+- How to use:
 To start the app (default):
 docker run -it <your-image>
 

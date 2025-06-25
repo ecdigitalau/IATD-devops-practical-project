@@ -1,24 +1,20 @@
-# Use lightweight Node image
+# Use Node.js 20 with Alpine Linux as the base image
 FROM node:20-alpine3.19
 
 # Update Alpine packages to reduce vulnerabilities
 RUN apk update && apk upgrade --no-cache
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy only the package definition files first to leverage Docker layer caching
 COPY package*.json ./
+
+# Install project dependencies
 RUN npm install
 
-# Copy all other project files
+# Copy the rest of the project into the container
 COPY . .
 
-# Copy entrypoint script and make it executable
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Use the entrypoint script to decide command
-ENTRYPOINT ["/entrypoint.sh"]
-
-
+# No CMD or ENTRYPOINT defined here.
+# This image is flexible – it will run commands passed at runtime.
