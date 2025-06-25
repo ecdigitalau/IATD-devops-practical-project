@@ -11,6 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install project dependencies
+RUN npm install eslint-plugin-node
 RUN npm install
 
 # Copy the rest of the project into the container
