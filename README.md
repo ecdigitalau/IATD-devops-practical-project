@@ -1,6 +1,7 @@
-- Build your docker images
-docker run jest-testing npm test
+How to use:
+To start the app (default):
+docker run -it <your-image>
 
 
-- Test Command (Inside Docker)
-docker run jest-testing npm test
+To run tests instead:
+docker run -it <your-image> test
