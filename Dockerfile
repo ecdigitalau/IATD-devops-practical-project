@@ -8,7 +8,8 @@ RUN apk update && apk upgrade --no-cache
 WORKDIR /app
 
 # Copy only the package definition files first to leverage Docker layer caching
-COPY package*.json ./
+# COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Install project dependencies
 RUN npm install

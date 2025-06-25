@@ -9,9 +9,10 @@ export default [
       ecmaVersion: 2022,
       sourceType: 'module',
     },
-    plugins: {
-      node: eslintPluginNode,
-    },
+    // plugins: {
+    //   node: eslintPluginNode,
+    // },
+    plugins: [node],
     rules: {
       'no-unused-vars': 'warn',
       'no-undef': 'error',
