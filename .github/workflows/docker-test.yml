@@ -14,23 +14,23 @@ jobs:
     runs-on: ubuntu-latest  # 🐧 Use the latest Ubuntu-based runner
 
     steps:
-      # 📥 Step 1: Checkout the repository source code
+      # Step 1: Checkout the repository source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🛠️ Step 2: Set up Docker Buildx (optional but future-proof)
+      # Step 2: Set up Docker Buildx (optional but future-proof)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 🐳 Step 3: Build Docker image using Dockerfile in project root
+      # Step 3: Build Docker image using Dockerfile in project root
       - name: Build Docker image
         run: docker build -t jest-testing .
 
-      # 🧪 Step 4: Run Jest tests inside the container
+      # Step 4: Run Jest tests inside the container
       - name: Run tests inside Docker container
         run: docker run jest-testing npm test
 
-      # ✅ Optional: Push image to Docker Hub (requires Docker Hub credentials)
+      # Optional: Push image to Docker Hub (requires Docker Hub credentials)
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@v3
       #   with:
@@ -43,7 +43,7 @@ jobs:
       # - name: Push to Docker Hub
       #   run: docker push your-dockerhub-username/jest-testing:latest
 
-      # ✅ Optional: Push image to GitHub Container Registry (GHCR)
+      # Optional: Push image to GitHub Container Registry (GHCR)
       # - name: Log in to GitHub Container Registry
       #   uses: docker/login-action@v3
       #   with:
