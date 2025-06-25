@@ -1,0 +1,33 @@
+# Name of the workflow shown in the GitHub Actions UI
+name: Node CI Workflow
+
+# This workflow runs whenever code is pushed to any branch
+on: 
+  push:
+
+jobs:
+  test_project:  # Unique ID for this job (used internally by GitHub)
+    name: Test Project with Node and Jest  # Human-friendly name displayed in the Actions UI
+
+    # This job will run on the latest version of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from the repository so the runner has access to it
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Uses the official GitHub Action to clone the repo
+
+      # Step 2: Setup the Node.js environment
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4  # Uses the official Node.js setup action
+        with:
+          node-version: 20.12.1     # Specifies the Node.js version to use
+          cache: 'npm'              # Enables caching of npm dependencies for faster builds
+
+      # Step 3: Install project dependencies using a clean install method
+      - name: Install dependencies using npm ci
+        run: npm ci  # Installs dependencies based on package-lock.json (faster and CI-friendly)
+
+      # Step 4: Run the Jest test suite
+      - name: Run test suite
+        run: npm test  # Executes your test scripts as defined in package.json

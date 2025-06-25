@@ -4,6 +4,9 @@ node_modules/
 # Optional npm cache directory
 .npm/
 
+# Optional yarn cache directory
+.yarn/
+
 # Logs
 logs/
 *.log
