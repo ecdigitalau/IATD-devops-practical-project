@@ -1,5 +1,5 @@
-Understanding Your CI/CD Pipeline (for Students!)
-=================================================
+Understanding Your CI/CD Pipeline 
+==================================
 
 This guide helps you set up a complete **CI/CD pipeline** using **GitHub Actions** and **Docker Hub** for your Node.js project. Think of this as a detailed recipe for how your code gets checked, tested, and shared with the world! This recipe uses something called "GitHub Actions" to automate these steps whenever you make changes to your project.
 
