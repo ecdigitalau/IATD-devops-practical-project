@@ -1,8 +1,8 @@
-# 👷‍♂️ This is a GitHub Actions workflow for running tests inside a Docker container.
+# This is a GitHub Actions workflow for running tests inside a Docker container.
 
 name: Docker-based CI Pipeline
 
-# 🧯 Trigger the workflow only when changes are pushed to the main branch
+# Trigger the workflow only when changes are pushed to the main branch
 on:
   push:
     branches:
@@ -11,7 +11,7 @@ on:
 jobs:
   run-tests-in-docker:
     name: Run Tests Inside Docker Container
-    runs-on: ubuntu-latest  # 🐧 Use the latest Ubuntu-based runner
+    runs-on: ubuntu-latest  # Use the latest Ubuntu-based runner
 
     steps:
       # Step 1: Checkout the repository source code

@@ -11,5 +11,6 @@ RUN npm install
 
 COPY . .
 
-# Default to run tests (change CMD when building/running to switch to prod start)
-CMD [ "npm", "test" ]
+# Default to run start (change CMD when building/running to switch to prod start)
+CMD [ "npm", "start" ]
+
