@@ -5,5 +5,8 @@ yarn-error.log
 .DS_Store
 .env
 .git
+.gitignore
 .vscode
+Dockerfile
+README.md
 

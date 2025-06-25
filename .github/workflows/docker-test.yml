@@ -1,0 +1,58 @@
+# 👷‍♂️ This is a GitHub Actions workflow for running tests inside a Docker container.
+
+name: Docker-based CI Pipeline
+
+# 🧯 Trigger the workflow only when changes are pushed to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-tests-in-docker:
+    name: Run Tests Inside Docker Container
+    runs-on: ubuntu-latest  # 🐧 Use the latest Ubuntu-based runner
+
+    steps:
+      # 📥 Step 1: Checkout the repository source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 🛠️ Step 2: Set up Docker Buildx (optional but future-proof)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 🐳 Step 3: Build Docker image using Dockerfile in project root
+      - name: Build Docker image
+        run: docker build -t jest-testing .
+
+      # 🧪 Step 4: Run Jest tests inside the container
+      - name: Run tests inside Docker container
+        run: docker run jest-testing npm test
+
+      # ✅ Optional: Push image to Docker Hub (requires Docker Hub credentials)
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # - name: Tag image
+      #   run: docker tag jest-testing your-dockerhub-username/jest-testing:latest
+
+      # - name: Push to Docker Hub
+      #   run: docker push your-dockerhub-username/jest-testing:latest
+
+      # ✅ Optional: Push image to GitHub Container Registry (GHCR)
+      # - name: Log in to GitHub Container Registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Tag image for GHCR
+      #   run: docker tag jest-testing ghcr.io/${{ github.repository_owner }}/jest-testing:latest
+
+      # - name: Push to GHCR
+      #   run: docker push ghcr.io/${{ github.repository_owner }}/jest-testing:latest
