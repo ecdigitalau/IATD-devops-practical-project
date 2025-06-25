@@ -1,4 +1,4 @@
-# CI/CD GitHub Actions workflow for Node.js app using Docker
+# CI/CD GitHub Actions workflow for Node.js app using Docker with ESLint, Jest, and Docker Hub deployment
 
 name: Docker-based CI/CD Pipeline
 
@@ -9,7 +9,7 @@ on:
 
 jobs:
   ci-test:
-    name: Continuous Integration - Build & Test
+    name: Continuous Integration - Lint, Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -21,14 +21,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 3: Log in to Docker Hub
+      # Step 3: Docker Hub Login
       - name: Docker Hub Login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 4: Build image tagged as :test and push to Docker Hub
+      # Step 4: Build Docker image (tagged :test) and push to Docker Hub
       - name: Build and push image (test tag)
         uses: docker/build-push-action@v5
         with:
@@ -37,8 +37,23 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test
 
-      # Step 5: Run tests inside Docker container
-      - name: Run tests in Docker container
+      # Step 5: Run ESLint in container with JSON output
+      - name: Run ESLint static analysis
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app \
+          ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test \
+          npx eslint . -f json -o eslint_report.json
+        continue-on-error: true
+
+      # Step 6: Annotate ESLint issues
+      - name: Annotate ESLint results
+        uses: ataylorme/eslint-annotate-action@v3
+        with:
+          report-json: eslint_report.json
+          only-pr-files: false
+
+      # Step 7: Run tests inside Docker container (Jest)
+      - name: Run tests
         run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test npm test
 
   cd-deploy:
@@ -47,14 +62,14 @@ jobs:
     needs: ci-test  # Only run if tests passed
 
     steps:
-      # Step 1: Docker Hub Login again
+      # Step 1: Docker Hub Login
       - name: Docker Hub Login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 2: Pull :test image and tag it as :latest
+      # Step 2: Pull :test image and re-tag as :latest
       - name: Pull :test image and re-tag
         run: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test
@@ -63,23 +78,28 @@ jobs:
       # Step 3: Push :latest image
       - name: Push :latest image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:latest
-      
-        # Step 4: Clean up local Docker images
+
+      # Step 4: Clean up local Docker images
       - name: Clean up local Docker images
-        run: docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:latest || true 
-        # The || true ensures the step doesn't fail if the images don't exist
-      
-        # Step 5: Clean up dangling images
+        run: docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:latest || true
+
+      # Step 5: Clean up dangling images
       - name: Clean up dangling images
         run: docker image prune -f
-        # This removes any dangling images that are not tagged and not referenced by any containers   
-      
-        # Step 6: Clean up unused volumes
+
+      # Step 6: Clean up unused volumes
       - name: Clean up unused volumes 
         run: docker volume prune -f
-        # This removes any unused volumes that are not referenced by any containers 
-      
-        # Step 7: Clean up unused networks
+
+      # Step 7: Clean up unused networks  
       - name: Clean up unused networks  
         run: docker network prune -f
-        # This removes any unused networks that are not referenced by any containers
+      
+      # Step 8: Clean up unused containers
+      - name: Clean up unused containers
+        run: docker container prune -f
+      
+      # Step 9: Clean up dangling build cache
+      - name: Clean up dangling build cache
+        run: docker builder prune -f
+      
