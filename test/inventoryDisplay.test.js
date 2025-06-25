@@ -1,4 +1,4 @@
-import { createItemEntry, createTableHeader } from "../src/inventoryDisplay";
+import { createItemEntry, createTableHeader } from "../src/inventoryDisplay.js";
 
 test("createTableHeader: create table header", () => {
     const expectedResult =

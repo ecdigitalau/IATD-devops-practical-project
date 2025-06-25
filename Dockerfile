@@ -1,9 +1,15 @@
-FROM node:20.12-alpine
+# Dockerfile
+FROM node:20-alpine3.19
 
-COPY package.json package-lock.json ./
+# Update Alpine packages to reduce vulnerabilities
+RUN apk update && apk upgrade --no-cache
 
+WORKDIR /app
+
+COPY package*.json ./
 RUN npm install
 
-COPY ./ ./
+COPY . .
 
-CMD [ "npm", "start" ]
+# Default to run tests (change CMD when building/running to switch to prod start)
+CMD [ "npm", "test" ]
