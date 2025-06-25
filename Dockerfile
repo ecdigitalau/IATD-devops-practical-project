@@ -21,5 +21,4 @@ RUN chmod +x /entrypoint.sh
 # Use the entrypoint script to decide command
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Default command is to start the app
-CMD ["start"]
+
