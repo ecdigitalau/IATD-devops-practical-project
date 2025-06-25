@@ -31,17 +31,17 @@ jobs:
         run: docker run jest-testing npm test
 
       # Optional: Push image to Docker Hub (requires Docker Hub credentials)
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Tag image
-      #   run: docker tag jest-testing your-dockerhub-username/jest-testing:latest
+      - name: Tag image
+        run: docker tag jest-testing ecdigital/jest-testing:latest
 
-      # - name: Push to Docker Hub
-      #   run: docker push your-dockerhub-username/jest-testing:latest
+      - name: Push to Docker Hub
+        run: docker push ecdigital/jest-testing:latest
 
       # Optional: Push image to GitHub Container Registry (GHCR)
       # - name: Log in to GitHub Container Registry
