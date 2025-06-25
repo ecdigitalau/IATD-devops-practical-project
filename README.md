@@ -214,7 +214,7 @@ After pushing your code to GitHub and the pipeline completes, your Docker image 
 
 ```
 docker login  # Only if your repository on Docker Hub is private  
-docker run -it /jest-testing:latest   
+docker run -it ecdigital/jest-testing:latest  
 ```
 
 
