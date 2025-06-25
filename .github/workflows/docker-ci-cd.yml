@@ -38,11 +38,21 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test
 
       # Step 5: Run ESLint in container with JSON output
-      - name: Run ESLint static analysis
+      # - name: Run ESLint static analysis
+      #   run: |
+      #     docker run --rm -v ${{ github.workspace }}:/app -w /app \
+      #     ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test \
+      #     npx eslint . -f json -o eslint_report.json
+      #   continue-on-error: true
+
+      # Step 5: Run ESLint static analysis
+      - name: Run ESLint static analysis (JSON report)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app \
+          docker run --rm \
+          -v ${{ github.workspace }}:/app \
+          -w /app \
           ${{ secrets.DOCKERHUB_USERNAME }}/jest-testing:test \
-          npx eslint . -f json -o eslint_report.json
+          sh -c "npx eslint . --format json --output-file eslint_report.json"
         continue-on-error: true
 
       # Step 6: Annotate ESLint issues
